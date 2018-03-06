@@ -5,12 +5,8 @@ import Frame.Field;
 import java.awt.BorderLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
+import javax.swing.*;
+
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
     private static final int WIDTH = 700;
@@ -31,10 +27,15 @@ public class MainFrame extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
-        JMenu ballMenu = new JMenu("Кирпичи");
-
+        JMenu ballMenu = new JMenu("Мячи");
+        Action addBrickAction = new AbstractAction("Добавить мяч") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                field.addBall();
+            }
+        };
         menuBar.add(ballMenu);
-
+        ballMenu.add(addBrickAction);
         JMenu controlMenu = new JMenu("Управление");
         menuBar.add(controlMenu);
         Action pauseAction = new AbstractAction("Приостановить движение"){
@@ -57,6 +58,12 @@ public class MainFrame extends JFrame {
         resumeMenuItem = controlMenu.add(resumeAction);
         resumeMenuItem.setEnabled(false);
         getContentPane().add(field, BorderLayout.CENTER);
+
+        JTextField textField = new JTextField("коэффициент трения",15);
+        textField.addActionListener( (ActionEvent e) ->
+                field.setFriction(Integer.parseInt(textField.getText())));
+
+        controlMenu.add(textField);
     }
 
     public static void main(String[] args) {

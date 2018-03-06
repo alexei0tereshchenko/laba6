@@ -16,6 +16,7 @@ public class BouncingBall implements Runnable {
     private int speed;
     private double speedX;
     private double speedY;
+    private int cost;
     public BouncingBall(Field field) {
         this.field = field;
         radius = new Double(Math.random()*(MAX_RADIUS -
@@ -40,10 +41,28 @@ public class BouncingBall implements Runnable {
         thisThread.start();
     }
 
+    private void recalculateSpeed(double speed){
+        if(speed>0) {
+            speed-=field.getFriction()/radius;
+            if (speed<0) speed=0;
+        }
+        else if(speed<0){
+            speed+=field.getFriction()/radius;
+            if (speed>0) speed=0;
+        }
+        else speed=0;
+    }
     public void run() {
         try {
             while(true) {
                 field.canMove(this);
+                speed-=field.getFriction()/radius;
+                if (speed < 0) {
+                    speed = 0;
+                    break;
+                }
+                recalculateSpeed(speedY);
+                recalculateSpeed(speedX);
                 if (x + speedX <= radius) {
                     // Достигли левой стенки, отскакиваем вправо
                     speedX = -speedX;
@@ -68,7 +87,10 @@ public class BouncingBall implements Runnable {
                     x += speedX;
                     y += speedY;
                 }
-                //TODO: столкновения с кирпичами
+                if(field.getFriction()!=0&&speed!=0) {
+                    Thread.sleep((field.getFriction() + cost)/(speed*radius));
+                    cost += speed;
+                }
                 /* Засыпаем на X миллисекунд, где X определяется
                 исходя из скорости
                 Скорость = 1 (медленно), засыпаем на 15 мс.
