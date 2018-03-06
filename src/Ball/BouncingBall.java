@@ -8,7 +8,7 @@ public class BouncingBall implements Runnable {
     private static final int MAX_RADIUS = 40;
     private static final int MIN_RADIUS = 3;
     private static final int MAX_SPEED = 10;
-    private Field field;
+    private static Field field;
     private int radius;
     private Color color;
     private double x;
@@ -45,7 +45,7 @@ public class BouncingBall implements Runnable {
             while(true) {
                 field.canMove(this);
                 if (x + speedX <= radius) {
-                    // Достигли левой стенки, отскакиваем право
+                    // Достигли левой стенки, отскакиваем вправо
                     speedX = -speedX;
                     x = radius;
                 } else

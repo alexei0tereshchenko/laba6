@@ -1,26 +1,24 @@
 package Frame;
 
 import Ball.BouncingBall;
-import Brick.SolidBrick;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 
 @SuppressWarnings("serial")
 public class Field extends JPanel {
+    private static boolean[][] brickField = new boolean[12][16];
 
     private boolean paused;
 
     private BouncingBall ball;
 
-    private ArrayList<SolidBrick> bricks = new ArrayList<SolidBrick>(10);
 
     private Timer repaintTimer = new Timer(10, new ActionListener() {
         @Override
@@ -33,6 +31,9 @@ public class Field extends JPanel {
         setBackground(Color.WHITE);
         repaintTimer.start();
         ball = new BouncingBall(this);
+        for (int i=0; i<12; i++)
+            for (int j=0; j<16; j++)
+                brickField[i][j]=false;
     }
 
     @Override
@@ -40,15 +41,8 @@ public class Field extends JPanel {
         super.paintComponent(g);
         Graphics2D canvas = (Graphics2D) g;
         ball.paint(canvas);
-        for(SolidBrick brick: bricks)
-        {
-            brick.paint(canvas);
-        }
     }
 
-    public void addBrick(){
-        bricks.add(new SolidBrick(this));
-    }
 
     public synchronized void pause() {
         paused = true;

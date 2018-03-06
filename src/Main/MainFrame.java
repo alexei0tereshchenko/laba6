@@ -32,18 +32,9 @@ public class MainFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
         JMenu ballMenu = new JMenu("Кирпичи");
-        Action addBrickAction = new AbstractAction("Добавить кирпич") {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                field.addBrick();
-                if (!pauseMenuItem.isEnabled() &&
-                        !resumeMenuItem.isEnabled()) {
-                    pauseMenuItem.setEnabled(true);
-                }
-            }
-        };
+
         menuBar.add(ballMenu);
-        ballMenu.add(addBrickAction);
+
         JMenu controlMenu = new JMenu("Управление");
         menuBar.add(controlMenu);
         Action pauseAction = new AbstractAction("Приостановить движение"){
@@ -55,7 +46,7 @@ public class MainFrame extends JFrame {
             }
         };
         pauseMenuItem = controlMenu.add(pauseAction);
-        pauseMenuItem.setEnabled(false);
+        pauseMenuItem.setEnabled(true);
         Action resumeAction = new AbstractAction("Возобновить движение") {
             public void actionPerformed(ActionEvent event) {
                 field.resume();
